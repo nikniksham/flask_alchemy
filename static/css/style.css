@@ -1,0 +1,34 @@
+.red {
+    color: #f44;
+}
+
+.blue_button {
+    color: #fff;
+    background: #44f;
+}
+
+.c1 {
+    background: #f44;
+}
+
+.c2 {
+    background: #4f4;
+}
+
+.c3 {
+    background: #ff4;
+}
+
+.c4 {
+    background: #888;
+}
+
+form.login_form {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 450px;
+    background-color: #ffcc00;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
