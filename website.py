@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, make_response
-from flask_login import LoginManager, login_user, login_manager, login_required, logout_user
+from flask_login import LoginManager, login_user, login_manager, login_required, logout_user, current_user
 from werkzeug.utils import redirect
 import random
 from data import db_session
 from data.LoginForm import LoginForm
+from data.WorksForm import WorksForm
 from data.forms import RegisterForm
 from data.users import User
 from data.jobs import Jobs
@@ -43,8 +44,6 @@ def main():
             session.add(job)
             session.commit()
             print('new_job')
-    print('http://127.0.0.1:8000/login/')
-    print('http://127.0.0.1:8000/register/')
     app.run(port=8000)
 
 
@@ -115,11 +114,30 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route('/logout')
+@app.route('/logout/')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/addjob',  methods=['GET', 'POST'])
+@login_required
+def add_jobs():
+    form = WorksForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        jobs = Jobs()
+        jobs.job = form.job.data
+        jobs.team_leader = form.team_leader.data
+        jobs.collaborators = form.collaborators.data
+        jobs.is_finished = form.is_finished.data
+        current_user.User.append(jobs)
+        session.merge(current_user)
+        session.commit()
+        return redirect('/')
+    return render_template('works.html', title='Добавление новости',
+                           form=form)
 
 
 def new_chef():
