@@ -2,10 +2,9 @@ from os import abort
 from flask import Flask, render_template, request, make_response, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
-import random
 from data import db_session
-from data.LoginForm import LoginForm
-from data.WorksForm import WorksForm
+from data.forms import LoginForm
+from data.forms import WorksForm
 from data.forms import RegisterForm
 from data.users import User
 from data.jobs import Jobs
@@ -44,7 +43,10 @@ def register():
         user = User()
         user.name = form.name.data
         user.email = form.email.data
-        user.about = form.about.data
+        user.address = form.address.data
+        user.speciality = form.speciality.data
+        user.position = form.position.data
+        user.surname = form.surname.data
         user.set_password(form.password.data)
         session.add(user)
         session.commit()
@@ -105,6 +107,7 @@ def add_jobs():
         jobs.job = form.job.data
         jobs.team_leader = form.team_leader.data
         jobs.collaborators = form.collaborators.data
+        jobs.work_size = form.work_size.data
         jobs.is_finished = form.is_finished.data
         current_user.User.append(jobs)
         session.merge(current_user)
