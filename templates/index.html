@@ -1,49 +1,68 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Журнал работ</h1>
-{% for item in jobs%}
-<div class="col-md6 border rounded">
-    <h2>{{item.title}}</h2>
+<div align="center">
     <div>
-        {{item.content}}
+        <h2>Список работ</h2>
     </div>
-    <div>
-        <table>
-            <tr>
-                <td>
-                    <a>Название</a>
-                </td>
-                <td>
-                    <a>Главный</a>
-                </td>
-                <td>
-                    <a>Объём работы</a>
-                </td>
-                <td><a>Участники</a>
-                </td>
-                <td>
-                    <a>Завершено</a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a>{{item.job}}</a>
-                </td>
-                <td>
-                    <a>{{item.team_leader}}</a>
-                </td>
-                <td>
-                    <a>{{item.work_size}}</a>
-                </td>
-                <td><a>{{item.collaborators}}</a>
-                </td>
-                <td>
-                    <a>{{item.is_finished}}</a>
-                </td>
-            </tr>
-        </table>
+    {% for job in jobs %}
+    <div class="text">
+        <h2>Работа #{{job.id}}</h2>
+        {% if current_user.is_authenticated and current_user.id == job.user.id or current_user.id == 1 %}
+        <div>
+            <a href="/jobs/{{ job.id }}" class="btn btn-warning">Изменить</a>
+            <a href="/jobs_delete/{{ job.id }}" class="btn btn-danger">Удалить</a>
+        </div>
+        <br>
+        <br>
+        {% endif %}
+        <div class="text">
+            <table>
+                <tr>
+                    <td>
+                        <a>Работа</a>
+                    </td>
+                    <td>
+                        <a>Руковолитель</a>
+                    </td>
+                    <td>
+                        <a>Длительность</a>
+                    </td>
+                    <td>
+                        <a>ID работников</a>
+                    </td>
+                    <td>
+                        <a>Статус</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a>{{job.job}}</a>
+                    </td>
+                    <td>
+                        <a>{{job.team_leader}}</a>
+                    </td>
+                    <td>
+                        <a>{{job.work_size}}</a>
+                    </td>
+                    <td>
+                        <a>{{job.collaborators}}</a>
+                    </td>
+                    <td>
+                        <a>работа</a>
+                        <br>
+                        {% if job.is_finished %}
+                        <a>закончена</a>
+                        {% else%}
+                        <a>не закончена</a>
+                        {% endif%}
+
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        {% endfor %}
     </div>
+    {% endblock %}
 </div>
-{% endfor %}
-{% endblock %}

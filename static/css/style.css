@@ -33,6 +33,38 @@ form.login_form {
     padding: 10px;
 }
 
+table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    max-width: 70%;
+    width: 70%;
+    text-align: center;
+    border-collapse: collapse;
+    border-top: 7px solid #ddd;
+    border-bottom: 7px solid #ddd;
+}
+
+th {
+    font-size: 13px;
+    font-weight: normal;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    color: #ddd;
+    padding: 8px;
+}
+
+td {
+    background: #ccc;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    color: #000;
+    padding: 8px;
+}
+
 p, a {
     float: left;
+}
+
+.text {
+    text-align: left;
 }

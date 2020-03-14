@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, make_response
-from flask_login import LoginManager, login_user, login_manager, login_required, logout_user, current_user
+from os import abort
+from flask import Flask, render_template, request, make_response, url_for
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
 import random
 from data import db_session
@@ -17,41 +18,14 @@ login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/colonist.sqlite")
-    c = False
-    if c:
-        with open('last_number.txt', 'r') as f:
-            last_number = int(f.read())
-        with open('last_number.txt', 'w') as f:
-            f.write(str(last_number + 3))
-        for i in range(last_number, last_number + 3):
-            user = User()
-            user.name = f'Колонист № {i}'
-            user.age = random.choice(range(16, 66))
-            user.speciality = 'cleaner'
-            user.address = f'module {random.choice(range(1, 101))}'
-            user.email = f'happy_colonist{i}@spaceX.com'
-            session = db_session.create_session()
-            session.add(user)
-            session.commit()
-            print('new_colonist')
-            job = Jobs()
-            job.team_leader = 'Scott Ridley'
-            job.job = f'deployment of residential module {random.choice(range(1, 101))}'
-            job.collaborators = f"{i - 1}, {i}, {i + 1}"
-            job.is_finished = False
-            job.work_size = f'{random.choice(range(5, 11))} hours'
-            session = db_session.create_session()
-            session.add(job)
-            session.commit()
-            print('new_job')
-    app.run(port=8000)
+    app.run(port=8080)
 
 
 @app.route("/")
 def index():
     session = db_session.create_session()
     jobs = session.query(Jobs).all()
-    return render_template("index.html", jobs=jobs)
+    return render_template("index.html", jobs=jobs, style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/register/', methods=['GET', 'POST'])
@@ -140,26 +114,58 @@ def add_jobs():
                            form=form)
 
 
-def new_chef():
+@app.route('/jobs/<int:id>', methods=['GET', 'POST'])
+@login_required
+def jobs(id):
     session = db_session.create_session()
-    user = User()
-    user.surname = 'Scott'
-    user.name = 'Ridley'
-    user.age = 21
-    user.position = 'captain'
-    user.speciality = 'research engineer'
-    user.address = 'module_1'
-    user.email = 'scott_chief@mars.org'
-    session.add(user)
-    session.commit()
+    jobs = session.query(Jobs).filter(Jobs.id == id).first()
+    if current_user.id in [jobs.user.id, 1]:
+        form = WorksForm()
+        if request.method == "GET":
+            session = db_session.create_session()
+            jobs = session.query(Jobs).filter(Jobs.id == id).first()
+            if jobs:
+                form.job.data = jobs.job
+                form.team_leader.data = jobs.team_leader
+                form.work_size.data = jobs.work_size
+                form.collaborators.data = jobs.collaborators
+                form.is_finished.data = jobs.is_finished
+            else:
+                abort(404)
+        if form.validate_on_submit():
+            session = db_session.create_session()
+            jobs = session.query(Jobs).filter(Jobs.id == id).first()
+            if jobs:
+                jobs.job = form.job.data
+                jobs.team_leader = form.team_leader.data
+                jobs.work_size = form.work_size.data
+                jobs.collaborators = form.collaborators.data
+                jobs.is_finished = form.is_finished.data
+                session.commit()
+                return redirect('/')
+            else:
+                abort(404)
+        return render_template('works.html', title='Редактирование новости', form=form)
+    else:
+        abort(404)
 
 
-def new_job():
+@app.route('/jobs_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def jobs_delete(id):
     session = db_session.create_session()
-    jobs = Jobs(team_leader=5, job='deployment of residential modules 1 and 2', work_size=15,
-                collaborators='2, 3', is_finished=False)
-    session.add(jobs)
-    session.commit()
+    jobs = session.query(Jobs).filter(Jobs.id == id).first()
+    if current_user.id in [jobs.user.id, 1]:
+        session = db_session.create_session()
+        jobs = session.query(Jobs).filter(Jobs.id == id).first()
+        if jobs:
+            session.delete(jobs)
+            session.commit()
+        else:
+            abort(404)
+        return redirect('/')
+    else:
+        abort(404)
 
 
 if __name__ == '__main__':
