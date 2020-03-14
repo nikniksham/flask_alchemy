@@ -1,15 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Записи в блоге</h1>
-{% for item in news%}
+<h1>Журнал работ</h1>
+{% for item in jobs%}
 <div class="col-md6 border rounded">
     <h2>{{item.title}}</h2>
     <div>
         {{item.content}}
     </div>
     <div>
-        Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
+        <table>
+            <tr>
+                <td>
+                    <a>Название</a>
+                </td>
+                <td>
+                    <a>Главный</a>
+                </td>
+                <td>
+                    <a>Объём работы</a>
+                </td>
+                <td><a>Участники</a>
+                </td>
+                <td>
+                    <a>Завершено</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a>{{item.job}}</a>
+                </td>
+                <td>
+                    <a>{{item.team_leader}}</a>
+                </td>
+                <td>
+                    <a>{{item.work_size}}</a>
+                </td>
+                <td><a>{{item.collaborators}}</a>
+                </td>
+                <td>
+                    <a>{{item.is_finished}}</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 {% endfor %}
