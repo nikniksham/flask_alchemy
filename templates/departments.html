@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div align="center">
+    <div>
+        <h2>Список департаментов</h2>
+    </div>
+    {% for department in departments %}
+    <div class="text">
+        <h2>Департамент #{{department.id}}</h2>
+        {% if current_user.is_authenticated and current_user.id == department.user.id or current_user.id == 1 %}
+        <div>
+            <a href="/departments/{{ department.id }}" class="btn btn-warning">Изменить</a>
+            <a href="/departments_delete/{{ department.id }}" class="btn btn-danger">Удалить</a>
+        </div>
+        <br>
+        <br>
+        {% endif %}
+        <div class="text">
+            <table>
+                <tr>
+                    <td>
+                        <a>Название департамента</a>
+                    </td>
+                    <td>
+                        <a>Главный</a>
+                    </td>
+                    <td>
+                        <a>ID участников</a>
+                    </td>
+                    <td>
+                        <a>Email департамента</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a>{{department.title}}</a>
+                    </td>
+                    <td>
+                        <a>{{department.chief}}</a>
+                    </td>
+                    <td>
+                        <a>{{department.members}}</a>
+                    </td>
+                    <td>
+                        <a>{{department.email}}</a>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
+</div>

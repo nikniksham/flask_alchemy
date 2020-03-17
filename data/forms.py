@@ -19,11 +19,20 @@ class RegisterForm(FlaskForm):
 
 class WorksForm(FlaskForm):
     job = StringField('Название работы', validators=[DataRequired()])
-    team_leader = TextAreaField("Главный", validators=[DataRequired()])
+    team_leader = StringField("Главный", validators=[DataRequired()])
     work_size = StringField("Объём работы", validators=[DataRequired()])
-    collaborators = TextAreaField('Участники', validators=[DataRequired()])
+    collaborators = StringField('Участники', validators=[DataRequired()])
+    hazard_category = StringField('Категория опасности', validators=[DataRequired()])
     is_finished = BooleanField("Завершена ли работа?")
-    submit = SubmitField("Применить")
+    submit = SubmitField("Далее")
+
+
+class DepartmentsForm(FlaskForm):
+    title = StringField("Название департамента", validators=[DataRequired()])
+    chief = StringField("Главный департамента", validators=[DataRequired()])
+    members = StringField("ID работников департамента", validators=[DataRequired()])
+    email = StringField("Email департамента", validators=[DataRequired()])
+    submit = SubmitField("Далее")
 
 
 class LoginForm(FlaskForm):

@@ -12,12 +12,14 @@
 </head>
 <body>
 <header class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="/">Наше приложение</a>
+    <a class="navbar-brand" href="/">Список работ</a>
+    <a class="navbar-brand" href="/departments">Спискок департаментов</a>
     <div align="right">
         {% if current_user.is_authenticated %}
         <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
         {% if current_user.is_authenticated %}
         <a href="addjob" class="btn btn-secondary">Добавить работу</a>
+        <a href="adddepartments" class="btn btn-secondary">Добавить департамент</a>
         {% endif %}
         {% else %}
         <p>

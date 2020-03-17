@@ -12,7 +12,8 @@ class Jobs(SqlAlchemyBase):
     work_size = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     collaborators = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     start_date = sqlalchemy.Column(sqlalchemy.DateTime)
-    speciality = sqlalchemy.Column(sqlalchemy.DateTime)
+    speciality = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    hazard_category = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("user.id"))

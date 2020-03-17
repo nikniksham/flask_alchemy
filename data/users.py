@@ -1,7 +1,6 @@
 import sqlalchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from .db_session import SqlAlchemyBase
 from sqlalchemy import orm
 
@@ -21,6 +20,7 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime)
     User = orm.relation("Jobs", back_populates='user')
+    department = orm.relation("Departments", back_populates='user')
 
     def __repr__(self):
         return f'<User> {self.id} Пользователь {self.id} {self.email}'
