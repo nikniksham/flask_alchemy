@@ -224,6 +224,10 @@ def departments(id):
             session = db_session.create_session()
             departments = session.query(Departments).filter(Departments.id == id).first()
             if departments:
+                departments.title = form.title.data
+                departments.chief = form.chief.data
+                departments.members = form.members.data
+                departments.email = form.email.data
                 session.commit()
                 return redirect('/departments')
             else:
