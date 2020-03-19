@@ -12,7 +12,7 @@
 </head>
 <body>
 <header class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="/">Список работ</a>
+    <a class="navbar-brand" href="/">Миссия Колонизация Марса</a>
     <a class="navbar-brand" href="/departments">Спискок департаментов</a>
     <div align="right">
         {% if current_user.is_authenticated %}
@@ -29,6 +29,7 @@
         {% endif %}
     </div>
 </header>
+<h4>И на марсе будут яблони цвести</h4>
 <!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}

@@ -18,6 +18,7 @@ login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/new_colonist.sqlite")
+    # print('http://127.0.0.1:8080/carousel')
     app.run(port=8080)
 
 
@@ -255,29 +256,10 @@ def departments_delete(id):
         abort(404)
 
 
+@app.route('/carousel')
+def carousel():
+    return render_template("carousel.html", style=url_for('static', filename='css/style.css'))
+
+
 if __name__ == '__main__':
     main()
-    create_new_db = False
-    if create_new_db:
-        db_session.global_init("db/new_colonist.sqlite")
-        print(1)
-        session = db_session.create_session()
-        print(2)
-        user = User()
-        print(3)
-        session.add(user)
-        print(4)
-        session.commit()
-        print(5)
-        session = db_session.create_session()
-        print(6)
-        jobs = Jobs()
-        print(7)
-        departments = Departments()
-        print(8)
-        session.add(jobs)
-        print(9)
-        session.add(departments)
-        print(10)
-        session.commit()
-        print('Успех!')
