@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if req == 0%}
+<div align="center">
+    <h2>Научные симуляторы</h2><br>
+    <img src={{img_1}} alt="здесь должна была быть картинка,
+      но не нашлась" height="400" width="600">
+</div>
+{% else%}
+<div align="center">
+    <h2>Тренажёры</h2><br>
+    <img src={{img_2}} alt="здесь должна была быть картинка,
+      но не нашлась" height="400" width="600">
+</div>
+{% endif%}
+{% endblock %}

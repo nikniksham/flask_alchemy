@@ -18,7 +18,7 @@ login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/new_colonist.sqlite")
-    # print('http://127.0.0.1:8080/carousel')
+    print('http://127.0.0.1:8080/training/строитель')
     app.run(port=8080)
 
 
@@ -258,7 +258,16 @@ def departments_delete(id):
 
 @app.route('/carousel')
 def carousel():
-    return render_template("carousel.html", style=url_for('static', filename='css/style.css'))
+    return render_template("carousel.html")
+
+
+@app.route('/training/<prof>')
+def training(prof):
+    req = 0
+    if 'инженер' in prof.lower().split() or 'строитель' in prof.lower().split():
+        req = 1
+    return render_template('help_map.html', req=req, img_1=url_for('static', filename='img/col_1.png'),
+                           img_2=url_for('static', filename='img/col_2.png'))
 
 
 if __name__ == '__main__':
