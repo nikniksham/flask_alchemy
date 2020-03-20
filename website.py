@@ -1,20 +1,22 @@
 import json
 from os import abort
-from flask import Flask, render_template, request, make_response, url_for
+
+import flask
+from flask import Flask, render_template, request, make_response, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
+import jobs_api
 from data import db_session
 import random
 from data.departments import Departments
-from data.forms import LoginForm, DepartmentsForm
-from data.forms import WorksForm
-from data.forms import RegisterForm
-from data.forms import LoginForm2
+from data.forms import LoginForm, DepartmentsForm, WorksForm, RegisterForm, LoginForm2
 from data.users import User
 from data.jobs import Jobs
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+blueprint = flask.Blueprint('jobs_api', __name__,
+                            template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -30,6 +32,8 @@ def main():
     print('http://127.0.0.1:8000/distribution')
     print('http://127.0.0.1:8000/table/male/15')
     print('http://127.0.0.1:8000/member')
+    print('http://127.0.0.1:8000/api/jobs/2')
+    app.register_blueprint(jobs_api.blueprint)
     app.run(port=8000)
 
 
@@ -344,6 +348,11 @@ def member():
     with open('templates/user.json', 'r', encoding='utf-8') as fh:
         user = json.load(fh)['Users'][random.choice(range(3))]
     return render_template('member.html', img=url_for('static', filename=f'img/{user["img"]}'), user=user)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == '__main__':
