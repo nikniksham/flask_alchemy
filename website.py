@@ -18,7 +18,7 @@ login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/new_colonist.sqlite")
-    print('http://127.0.0.1:8080/training/строитель')
+    print('http://127.0.0.1:8080//list_prof/ol')
     app.run(port=8080)
 
 
@@ -268,6 +268,14 @@ def training(prof):
         req = 1
     return render_template('help_map.html', req=req, img_1=url_for('static', filename='img/col_1.png'),
                            img_2=url_for('static', filename='img/col_2.png'))
+
+
+@app.route('/list_prof/<list>')
+def list_prof(list):
+    if list in ['ol', 'ul']:
+        return render_template('list_prof.html', list=list, title='list_prof')
+    else:
+        print('Неверный формат')
 
 
 if __name__ == '__main__':
