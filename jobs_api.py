@@ -14,8 +14,7 @@ def get_jobs():
     return jsonify(
         {
             'jobs':
-                [item.to_dict(only=('team_leader', 'job', 'work_size', 'collaborators', 'start_date', 'speciality',
-                                    'hazard_category', 'is_finished', 'user_id', 'user'))
+                [item.to_dict(only=('team_leader', 'job', 'work_size', 'collaborators', 'id', 'is_finished'))
                  for item in jobs]
         }
     )
@@ -59,7 +58,7 @@ def create_jobs():
 
 
 @blueprint.route('/api/jobs/<int:jobs_id>', methods=['DELETE'])
-def delete_news(jobs_id):
+def delete_jobs(jobs_id):
     session = db_session.create_session()
     print(jobs_id)
     jobs = session.query(Jobs).get(jobs_id)
