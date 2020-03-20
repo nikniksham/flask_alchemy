@@ -27,6 +27,7 @@ def main():
     print('http://127.0.0.1:8000/answer')
     print('http://127.0.0.1:8000/login_2')
     print('http://127.0.0.1:8000/distribution')
+    print('http://127.0.0.1:8000/table/male/15')
     app.run(port=8000)
 
 
@@ -324,6 +325,16 @@ def login_2():
 def distribution():
     users = ['Шамков Николай', 'Rjkz Торопов', 'Анатолий Федченко']
     return render_template('distribution.html', users=users)
+
+
+@app.route('/table/<sex>/<age>')
+def table(sex, age):
+    category = 'adult'
+    if int(age) < 21:
+        category = 'young'
+    return render_template('table.html', img_1=url_for('static', filename=f'img/{category}.png'),
+                           img_2=url_for('static', filename=f'img/{sex}_{category}.png'),
+                           style=url_for('static', filename='css/style.css'))
 
 
 if __name__ == '__main__':
