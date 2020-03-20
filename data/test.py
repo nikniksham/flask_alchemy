@@ -23,4 +23,13 @@ if test_2:
     print(delete('http://localhost:8000/api/jobs/n').json())
     # Не удалит работу, тк мы даём str вместо int
 if test_3:
+    print(get('http://localhost:8000/api/jobs').json())
     print(put('http://localhost:8000/api/jobs/1', json={'work_size': 300}).json())
+    print(get('http://localhost:8000/api/jobs').json())
+    # Удачное изменение
+    print(put('http://localhost:8000/api/jobs/1', json={'working_sized': 300}).json())
+    # Даём несуществующий ключ
+    print(put('http://localhost:8000/api/jobs/1', json={}).json())
+    # Не даём ключей для изменения
+    print(put('http://localhost:8000/api/jobs/99999999', json={'work_size': 300}).json())
+    # Не изменит, тк не существует работы с таким id
