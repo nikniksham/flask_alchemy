@@ -15,14 +15,20 @@ from data.jobs import Jobs
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-blueprint = flask.Blueprint('jobs_api', __name__,
-                            template_folder='templates')
+# Выберите api, с которым будете работать
+api = 'jobs'
+if api == 'jobs':
+    blueprint = flask.Blueprint('jobs_api', __name__,
+                                template_folder='templates')
+elif api == 'user':
+    blueprint = flask.Blueprint('user_api', __name__,
+                                template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 
 def main():
-    db_session.global_init("db/new_colonist.sqlite")
+    db_session.global_init("db/new_colonist_2.sqlite")
     print('http://127.0.0.1:8000/training/строитель')
     print('http://127.0.0.1:8000/training/врач')
     print('http://127.0.0.1:8000/list_prof/ol')
@@ -33,6 +39,7 @@ def main():
     print('http://127.0.0.1:8000/table/male/15')
     print('http://127.0.0.1:8000/member')
     print('http://127.0.0.1:8000/api/jobs/2')
+    print('НАСТОЯТЕЛЬНО РЕКОМУНДУЮ ЗАГЛЯНУТЬ НА 18 СТРОКУ')
     app.register_blueprint(jobs_api.blueprint)
     app.run(port=8000)
 
@@ -73,6 +80,7 @@ def register():
         user.position = form.position.data
         user.surname = form.surname.data
         user.set_password(form.password.data)
+        user.city_from = form.city_from.data
         session.add(user)
         session.commit()
         return redirect('/login')
@@ -356,4 +364,5 @@ def not_found(error):
 
 
 if __name__ == '__main__':
+    print('НАСТОЯТЕЛЬНО РЕКОМУНДУЮ ЗАГЛЯНУТЬ НА 18 СТРОКУ')
     main()
