@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, make_response, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
 from data import db_session
+import random
 from data.departments import Departments
 from data.forms import LoginForm, DepartmentsForm
 from data.forms import WorksForm
@@ -18,7 +19,11 @@ login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/new_colonist.sqlite")
-    print('http://127.0.0.1:8080//list_prof/ol')
+    print('http://127.0.0.1:8080/training/строитель')
+    print('http://127.0.0.1:8080/training/врач')
+    print('http://127.0.0.1:8080/list_prof/ol')
+    print('http://127.0.0.1:8080/list_prof/ul')
+    print('http://127.0.0.1:8080/answer')
     app.run(port=8080)
 
 
@@ -276,6 +281,28 @@ def list_prof(list):
         return render_template('list_prof.html', list=list, title='list_prof')
     else:
         print('Неверный формат')
+
+
+@app.route('/answer')
+def answer():
+    dict_answer = {'surname': '',
+                   'name': '',
+                   'education': random.choice(['Начальное', 'Среднее-неполное', 'Среднее', 'Среднее-профессинальное',
+                                               'Высшее', 'Магистратура']),
+                   'profession': random.choice(['Программист', 'Инженер', 'Экзобиолог', 'Пилот', 'Штурман',
+                                                'Пилот дронов', 'Врач']),
+                   'sex': random.choice(['male', 'female']),
+                   'motivation': random.choice(['Хочет приобщиться к чему-то великому', 'Мечтает улететь с земли',
+                                                'Обожает красный цвет', 'Хочет развеят скуку', 'Тяга ко знаниям']),
+                   'ready': random.choice([True, False])}
+    if dict_answer['sex'] == 'male':
+        dict_answer['name'] = random.choice(['Николай', 'Василий', 'Анатолий', 'Константин'])
+        dict_answer['surname'] = random.choice(['Шамков', 'Торопов', 'Громов', 'Севастьянов', 'Выров'])
+    elif dict_answer['sex'] == 'female':
+        dict_answer['name'] = random.choice(['Ирина', 'Анна', 'Анастасия', 'Александра', 'Ольга'])
+        dict_answer['surname'] = random.choice(['Бабурина', 'Леоновна', 'Кузнецова', 'Циргвава'])
+    return render_template('auto_answer.html', dict=dict_answer, title='answer',
+                           style=url_for('static', filename='css/style.css'))
 
 
 if __name__ == '__main__':

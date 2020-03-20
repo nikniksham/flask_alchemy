@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div align="center">
+    <table>
+        <tr>
+            <td>
+                <a>Фамилия:</a>
+            </td>
+            <td>
+                {{dict.surname}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a>Имя:</a>
+            </td>
+            <td>
+                {{dict.name}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a>Образование:</a>
+            </td>
+            <td>
+                {{dict.education}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a>Профессия:</a>
+            </td>
+            <td>
+                {{dict.profession}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a>Пол:</a>
+            </td>
+            <td>
+                {{dict.sex}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a>Мотивация:</a>
+            </td>
+            <td>
+                {{dict.motivation}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a>Готовы остаться на Марсе?</a>
+            </td>
+            <td>
+                {{dict.ready}}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
