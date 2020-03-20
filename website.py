@@ -26,6 +26,7 @@ def main():
     print('http://127.0.0.1:8000/list_prof/ul')
     print('http://127.0.0.1:8000/answer')
     print('http://127.0.0.1:8000/login_2')
+    print('http://127.0.0.1:8000/distribution')
     app.run(port=8000)
 
 
@@ -317,6 +318,12 @@ def login_2():
         return render_template('login_2.html', message="Ошибка в данных", form=form)
     return render_template('login_2.html', title='Аварийный доступ', form=form,
                            img=url_for('static', filename='img/MARS-2-7.png'))
+
+
+@app.route('/distribution')
+def distribution():
+    users = ['Шамков Николай', 'Rjkz Торопов', 'Анатолий Федченко']
+    return render_template('distribution.html', users=users)
 
 
 if __name__ == '__main__':
