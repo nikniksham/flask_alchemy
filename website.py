@@ -8,6 +8,7 @@ from data.departments import Departments
 from data.forms import LoginForm, DepartmentsForm
 from data.forms import WorksForm
 from data.forms import RegisterForm
+from data.forms import LoginForm2
 from data.users import User
 from data.jobs import Jobs
 
@@ -19,12 +20,13 @@ login_manager.init_app(app)
 
 def main():
     db_session.global_init("db/new_colonist.sqlite")
-    print('http://127.0.0.1:8080/training/строитель')
-    print('http://127.0.0.1:8080/training/врач')
-    print('http://127.0.0.1:8080/list_prof/ol')
-    print('http://127.0.0.1:8080/list_prof/ul')
-    print('http://127.0.0.1:8080/answer')
-    app.run(port=8080)
+    print('http://127.0.0.1:8000/training/строитель')
+    print('http://127.0.0.1:8000/training/врач')
+    print('http://127.0.0.1:8000/list_prof/ol')
+    print('http://127.0.0.1:8000/list_prof/ul')
+    print('http://127.0.0.1:8000/answer')
+    print('http://127.0.0.1:8000/login_2')
+    app.run(port=8000)
 
 
 @app.route("/")
@@ -90,7 +92,7 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -303,6 +305,17 @@ def answer():
         dict_answer['surname'] = random.choice(['Бабурина', 'Леоновна', 'Кузнецова', 'Циргвава'])
     return render_template('auto_answer.html', dict=dict_answer, title='answer',
                            style=url_for('static', filename='css/style.css'))
+
+
+@app.route('/login_2', methods=['GET', 'POST'])
+def login_2():
+    form = LoginForm2()
+    if form.validate_on_submit():
+        if form.id_captain.data != '' and form.id_astronaut.data != '' and form.password_captain.data != '' and \
+           form.password_astronaut.data != '':
+            return redirect("/")
+        return render_template('login_2.html', message="Ошибка в данных", form=form)
+    return render_template('login_2.html', title='Аварийный доступ', form=form)
 
 
 if __name__ == '__main__':

@@ -41,3 +41,10 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
+
+class LoginForm2(FlaskForm):
+    id_astronaut = StringField('Id астронавта', validators=[DataRequired()])
+    password_astronaut = PasswordField('Пароль астронавта', validators=[DataRequired()])
+    id_captain = StringField('Id капитана', validators=[DataRequired()])
+    password_captain = PasswordField('Пароль капитана', validators=[DataRequired()])
+    submit = SubmitField('Доступ')
