@@ -315,7 +315,8 @@ def login_2():
            form.password_astronaut.data != '':
             return redirect("/")
         return render_template('login_2.html', message="Ошибка в данных", form=form)
-    return render_template('login_2.html', title='Аварийный доступ', form=form)
+    return render_template('login_2.html', title='Аварийный доступ', form=form,
+                           img=url_for('static', filename='img/MARS-2-7.png'))
 
 
 if __name__ == '__main__':
