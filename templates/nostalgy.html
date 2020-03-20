@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+<div align="center">
+    <h1>Nostalgia</h1>
+    <h2>{{user.name}} {{user.surname}}</h2>
+    <h4>Hometown {{user.hometown}}</h4>
+    <img src={{img}} alt="здесь должна была быть картинка, но не нашлась" height="400" width="600"><br>
+</div>
+{% endblock %}

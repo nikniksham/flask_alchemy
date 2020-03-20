@@ -32,8 +32,4 @@ if test_3:
     print(put('http://localhost:8000/api/jobs/1', json={}).json())
     # Не даём ключей для изменения
     print(put('http://localhost:8000/api/jobs/99999999', json={'work_size': 300}).json())
-    # Не изменит, тк не существует работы с таким id
-for i in range(1, 5):
-    ans = get(f'http://localhost:8000/api/user/{i}').json()
-    if ans != {'error': 'Not found'}:
-        print(ans['user']['city_from'])
+    # Не изменит, тк не существует раб1оты с таким id

@@ -1,8 +1,13 @@
 import json
+import os
+from io import BytesIO
 from os import abort
 import flask
+import requests
+from PIL import Image
 from flask import Flask, render_template, request, make_response, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from requests import get
 from werkzeug.utils import redirect
 import jobs_api
 import users_api
@@ -21,6 +26,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+def get_spn(toponym):
+    poss = toponym['boundedBy']['Envelope']
+    delta_x = str(list(map(float, poss['upperCorner'].split()))[0] - list(map(float, poss['lowerCorner'].split()))[0])
+    delta_y = str(list(map(float, poss['upperCorner'].split()))[1] - list(map(float, poss['lowerCorner'].split()))[1])
+    return delta_x, delta_y
+
+
 def main():
     db_session.global_init("db/new_colonist_2.sqlite")
     print('http://127.0.0.1:8000/training/строитель')
@@ -32,6 +44,7 @@ def main():
     print('http://127.0.0.1:8000/distribution')
     print('http://127.0.0.1:8000/table/male/15')
     print('http://127.0.0.1:8000/member')
+    print('http://127.0.0.1:8000/users_show/1')
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
     app.run(port=8000)
@@ -215,7 +228,6 @@ def add_departments():
         session.merge(current_user)
         session.commit()
         return redirect('/departments')
-    print(1)
     return render_template('new_department.html', title='Добавление департамента', form=form)
 
 
@@ -344,11 +356,6 @@ def table(sex, age):
                            style=url_for('static', filename='css/style.css'))
 
 
-@app.route('/users_show/<int:user_id>')
-def users_show(user_id):
-    pass
-
-
 @app.route('/member')
 def member():
     with open('templates/user.json', 'r', encoding='utf-8') as fh:
@@ -356,9 +363,46 @@ def member():
     return render_template('member.html', img=url_for('static', filename=f'img/{user["img"]}'), user=user)
 
 
+@app.route('/users_show/<int:user_id>')
+def nostalgia(user_id):
+    ans = get(f'http://localhost:8000/api/user/{user_id}').json()
+    if ans != {'error': 'Not found'}:
+        hometown = ans['user']['city_from']
+        user = {"name": ans["user"]["name"], "surname": ans["user"]["surname"], "hometown": hometown}
+        a = hometown
+        if 'город' not in a.lower().split():
+            a = f'город {a}'
+        toponym_to_find = ' '.join(a)
+        print(a)
+        geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+        geocoder_params = {
+            "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
+            "geocode": toponym_to_find,
+            "format": "json"}
+
+        response = requests.get(geocoder_api_server, params=geocoder_params)
+
+        json_response = response.json()
+        toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
+        toponym_coodrinates = toponym["Point"]["pos"]
+        toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
+        map_params = {
+            "ll": ",".join([toponym_longitude, toponym_lattitude]),
+            "spn": ",".join(get_spn(toponym)),
+            "l": "sat",
+            "pt": ''
+        }
+        map_api_server = "http://static-maps.yandex.ru/1.x/"
+        response = requests.get(map_api_server, params=map_params)
+        map_file = "static/img/map.png"
+        with open(map_file, "wb") as file:
+            file.write(response.content)
+        return render_template('nostalgy.html', img=url_for('static', filename='img/map.png'), user=user)
+    return render_template('error_404.html', style=url_for('static', filename='css/style.css'))
+
+
 @app.errorhandler(404)
 def not_found(error):
-    print('отладка 2')
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
