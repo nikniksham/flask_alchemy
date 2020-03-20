@@ -13,7 +13,7 @@ if test_1:
     # Не выдаст работу, тк мы даём str вместо int
 if test_2:
     print(get('http://localhost:8000/api/jobs').json())
-    print(delete('http://localhost:8000/api/jobs/2').json())
+    print(delete('http://localhost:8000/api/jobs/3').json())
     print(get('http://localhost:8000/api/jobs').json())
     # Удачное удаление
     print(delete('http://localhost:8000/api/jobs/9999999').json())
