@@ -1,0 +1,15 @@
+{
+  "Users": [
+    {
+      "id": 1, "name": "Энди", "surname": "Уир", "img": "young.png", "spec": "программист"
+    },
+    {
+      "id": 2, "name": "Ридли", "surname": "Скот", "img": "adult.png", "spec": "капитан"
+    },
+    {
+      "id": 3, "name": "Марк", "surname": "Уотни", "img": "adult.png", "spec": "инженер"
+    }
+
+
+  ]
+}

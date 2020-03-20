@@ -1,3 +1,4 @@
+import json
 from os import abort
 from flask import Flask, render_template, request, make_response, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -28,6 +29,7 @@ def main():
     print('http://127.0.0.1:8000/login_2')
     print('http://127.0.0.1:8000/distribution')
     print('http://127.0.0.1:8000/table/male/15')
+    print('http://127.0.0.1:8000/member')
     app.run(port=8000)
 
 
@@ -335,6 +337,13 @@ def table(sex, age):
     return render_template('table.html', img_1=url_for('static', filename=f'img/{category}.png'),
                            img_2=url_for('static', filename=f'img/{sex}_{category}.png'),
                            style=url_for('static', filename='css/style.css'))
+
+
+@app.route('/member')
+def member():
+    with open('templates/user.json', 'r', encoding='utf-8') as fh:
+        user = json.load(fh)['Users'][random.choice(range(3))]
+    return render_template('member.html', img=url_for('static', filename=f'img/{user["img"]}'), user=user)
 
 
 if __name__ == '__main__':
