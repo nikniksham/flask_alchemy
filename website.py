@@ -1,11 +1,11 @@
 import json
 from os import abort
-
 import flask
 from flask import Flask, render_template, request, make_response, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
 import jobs_api
+import users_api
 from data import db_session
 import random
 from data.departments import Departments
@@ -15,14 +15,8 @@ from data.jobs import Jobs
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-# Выберите api, с которым будете работать
-api = 'jobs'
-if api == 'jobs':
-    blueprint = flask.Blueprint('jobs_api', __name__,
-                                template_folder='templates')
-elif api == 'user':
-    blueprint = flask.Blueprint('user_api', __name__,
-                                template_folder='templates')
+blueprint = flask.Blueprint('users_api', __name__,
+                            template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -38,9 +32,8 @@ def main():
     print('http://127.0.0.1:8000/distribution')
     print('http://127.0.0.1:8000/table/male/15')
     print('http://127.0.0.1:8000/member')
-    print('http://127.0.0.1:8000/api/jobs/2')
-    print('НАСТОЯТЕЛЬНО РЕКОМУНДУЮ ЗАГЛЯНУТЬ НА 18 СТРОКУ')
     app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(users_api.blueprint)
     app.run(port=8000)
 
 
@@ -351,6 +344,11 @@ def table(sex, age):
                            style=url_for('static', filename='css/style.css'))
 
 
+@app.route('/users_show/<int:user_id>')
+def users_show(user_id):
+    pass
+
+
 @app.route('/member')
 def member():
     with open('templates/user.json', 'r', encoding='utf-8') as fh:
@@ -360,9 +358,9 @@ def member():
 
 @app.errorhandler(404)
 def not_found(error):
+    print('отладка 2')
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == '__main__':
-    print('НАСТОЯТЕЛЬНО РЕКОМУНДУЮ ЗАГЛЯНУТЬ НА 18 СТРОКУ')
     main()

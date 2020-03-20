@@ -3,7 +3,7 @@ from flask import jsonify, request
 from data import db_session
 from data.users import User
 
-blueprint = flask.Blueprint('user_api', __name__,
+blueprint = flask.Blueprint('users_api', __name__,
                             template_folder='templates')
 
 
@@ -24,6 +24,7 @@ def get_user():
 @blueprint.route('/api/user/<int:user_id>',  methods=['GET'])
 def get_one_user(user_id):
     session = db_session.create_session()
+    print(user_id)
     user = session.query(User).get(user_id)
     if not user:
         return jsonify({'error': 'Not found'})
