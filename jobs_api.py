@@ -60,11 +60,44 @@ def create_jobs():
 @blueprint.route('/api/jobs/<int:jobs_id>', methods=['DELETE'])
 def delete_jobs(jobs_id):
     session = db_session.create_session()
-    print(jobs_id)
     jobs = session.query(Jobs).get(jobs_id)
-    print(jobs)
     if not jobs:
         return jsonify({'error': 'Not found'})
     session.delete(jobs)
+    session.commit()
+    return jsonify({'success': 'OK'})
+
+
+@blueprint.route('/api/jobs/<int:jobs_id>', methods=['PUT'])
+def put_jobs(jobs_id):
+    session = db_session.create_session()
+    jobs = session.query(Jobs).get(jobs_id)
+    if not jobs:
+        return jsonify({'error': 'Not found'})
+    if len(request.json) == 0:
+        return jsonify({'error': 'No keys for editing'})
+    for key in request.json:
+        if key not in ['team_leader', 'job', 'work_size', 'collaborators', 'id', 'is_finished', 'start_date',
+                       'speciality', 'hazard_category']:
+            return jsonify({'error': 'Invalid key for editing'})
+    for key in request.json:
+        if key == 'id':
+            jobs.id = request.json.get(key)
+        if key == 'team_leader':
+            jobs.team_leader = request.json.get(key)
+        if key == 'job':
+            jobs.job = request.json.get(key)
+        if key == 'collaborators':
+            jobs.collaborators = request.json.get(key)
+        if key == 'hazard_category':
+            jobs.hazard_category = request.json.get(key)
+        if key == 'work_size':
+            jobs.work_size = request.json.get(key)
+        if key == 'start_date':
+            jobs.start_date = request.json.get(key)
+        if key == 'speciality':
+            jobs.speciality = request.json.get(key)
+        if key == 'is_finished':
+            jobs.is_finished = request.json.get(key)
     session.commit()
     return jsonify({'success': 'OK'})
