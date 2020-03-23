@@ -1,10 +1,7 @@
 import json
-import os
-from io import BytesIO
 from os import abort
 import flask
 import requests
-from PIL import Image
 from flask import Flask, render_template, request, make_response, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import get
@@ -35,16 +32,7 @@ def get_spn(toponym):
 
 def main():
     db_session.global_init("db/new_colonist_2.sqlite")
-    print('http://127.0.0.1:8000/training/строитель')
-    print('http://127.0.0.1:8000/training/врач')
-    print('http://127.0.0.1:8000/list_prof/ol')
-    print('http://127.0.0.1:8000/list_prof/ul')
-    print('http://127.0.0.1:8000/answer')
-    print('http://127.0.0.1:8000/login_2')
-    print('http://127.0.0.1:8000/distribution')
-    print('http://127.0.0.1:8000/table/male/15')
-    print('http://127.0.0.1:8000/member')
-    print('http://127.0.0.1:8000/users_show/1')
+    print('http://127.0.0.1:8000/carousel')
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
     app.run(port=8000)
