@@ -1,4 +1,5 @@
 import json
+import os
 from os import abort
 import flask
 import requests
@@ -23,6 +24,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+def get_list_numbers(number):
+    numbers = []
+    for i in range(1, number + 1):
+        numbers.append(i)
+    return numbers
+
+
 def get_spn(toponym):
     poss = toponym['boundedBy']['Envelope']
     delta_x = str(list(map(float, poss['upperCorner'].split()))[0] - list(map(float, poss['lowerCorner'].split()))[0])
@@ -32,7 +40,7 @@ def get_spn(toponym):
 
 def main():
     db_session.global_init("db/new_colonist_2.sqlite")
-    print('http://127.0.0.1:8000/carousel')
+    print('http://127.0.0.1:8000/carousel_2')
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
     app.run(port=8000)
@@ -387,6 +395,30 @@ def nostalgia(user_id):
             file.write(response.content)
         return render_template('nostalgy.html', img=url_for('static', filename='img/map.png'), user=user)
     return render_template('error_404.html', style=url_for('static', filename='css/style.css'))
+
+
+@app.route('/carousel_2', methods=['POST', 'GET'])
+def carousel_2():
+    if request.method == 'GET':
+        number = 0
+        while True:
+            if not os.path.exists(f'static/img/mars_{number + 1}.jpg'):
+                break
+            else:
+                number += 1
+        return render_template('carousel_2.html', numbers=get_list_numbers(number), help=0)
+    if request.method == 'POST':
+        f = request.files['file']
+        number = 1
+        while True:
+            if not os.path.exists(f'static/img/mars_{number}.jpg'):
+                with open(f'static/img/mars_{number}.jpg', 'wb') as file:
+                    file.write(f.read())
+                break
+            else:
+                number += 1
+        return render_template('carousel_2.html', numbers=get_list_numbers(number),
+                               filename=url_for('static', filename=f'img/mars_{number}.jpg'), help=1)
 
 
 @app.errorhandler(404)
