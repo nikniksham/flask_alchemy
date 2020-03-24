@@ -7,7 +7,7 @@ test_version_second = False
 test_get = False
 test_post = False
 test_delete = False
-test_put = True
+test_put = False
 # api.add_resource(user_resources.UserListResource, '/api/v2/user')
 # api.add_resource(user_resources.UserResource, '/api/v2/user/<int:user_id>')
 if test_version_first:
