@@ -9,6 +9,7 @@ from flask_restful import Api
 from requests import get
 from werkzeug.utils import redirect
 import jobs_api
+import jobs_resource
 import user_resources
 import users_api
 from data import db_session
@@ -24,12 +25,11 @@ blueprint = flask.Blueprint('users_api', __name__,
                             template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
-app = Flask(__name__)
 api = Api(app)
-# для списка объектов
 api.add_resource(user_resources.UserListResource, '/api/v2/user')
-# для одного объекта
 api.add_resource(user_resources.UserResource, '/api/v2/user/<int:user_id>')
+api.add_resource(jobs_resource.JobsListResource, '/api/v2/jobs')
+api.add_resource(jobs_resource.JobsResource, '/api/v2/jobs/<int:jobs_id>')
 
 
 def get_list_numbers(number):
@@ -48,10 +48,10 @@ def get_spn(toponym):
 
 def main():
     db_session.global_init("db/new_colonist_2.sqlite")
-    print('http://127.0.0.1:8000/carousel_2')
+    print('http://127.0.0.1:8100/carousel_2')
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
-    app.run(port=8000)
+    app.run(port=8100)
 
 
 @app.route("/")
@@ -369,7 +369,7 @@ def member():
 
 @app.route('/users_show/<int:user_id>')
 def nostalgia(user_id):
-    ans = get(f'http://localhost:8000/api/user/{user_id}').json()
+    ans = get(f'http://localhost:8100/api/user/{user_id}').json()
     if ans != {'error': 'Not found'}:
         hometown = ans['user']['city_from']
         user = {"name": ans["user"]["name"], "surname": ans["user"]["surname"], "hometown": hometown}
