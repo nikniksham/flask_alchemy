@@ -2,7 +2,8 @@ from flask import jsonify
 from flask_restful import abort, Resource
 from data import db_session
 from data.users import User
-from parser_create_user_api import parser
+from parser_user_api import parser
+from put_parser_user_api import put_parser
 
 
 def abort_if_user_not_found(user_id):
@@ -25,6 +26,36 @@ class UserResource(Resource):
         session = db_session.create_session()
         user = session.query(User).get(user_id)
         session.delete(user)
+        session.commit()
+        return jsonify({'success': 'OK'})
+
+    def put(self, user_id):
+        abort_if_user_not_found(user_id)
+        args = put_parser.parse_args()
+        session = db_session.create_session()
+        user = session.query(User).get(user_id)
+        print(args)
+        print(args.keys())
+        for key in list(args.keys()):
+            if args[key] is not None:
+                if key == 'id':
+                    user.id = args['id']
+                if key == 'surname':
+                    user.surname = args['surname']
+                if key == 'name':
+                    user.name = args['name']
+                if key == 'age':
+                    user.age = args['age']
+                if key == 'position':
+                    user.position = args['position']
+                if key == 'speciality':
+                    user.speciality = args['speciality']
+                if key == 'address':
+                    user.address = args['address']
+                if key == 'email':
+                    user.email = args['email']
+                if key == 'city_from':
+                    user.city_from = args['city_from']
         session.commit()
         return jsonify({'success': 'OK'})
 

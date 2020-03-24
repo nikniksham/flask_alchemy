@@ -6,8 +6,8 @@ test_version_second = False
 # методы
 test_get = False
 test_post = False
-test_delete = True
-test_put = False
+test_delete = False
+test_put = True
 # api.add_resource(user_resources.UserListResource, '/api/v2/user')
 # api.add_resource(user_resources.UserResource, '/api/v2/user/<int:user_id>')
 if test_version_first:
@@ -58,15 +58,15 @@ if test_version_first:
 
     if test_put:
         print('нет в базе')
-        print(put('http://localhost:8000/api/jobs/999').json())
-        print('Успешно изменена')
-        print(put('http://localhost:8000/api/jobs/10',
-                   json={'job': 'нет загаловка'}).json())
-        print(get('http://localhost:8000/api/jobs/').json())
+        print(put('http://localhost:8000/api/v2/user/999').json())
+        print('Успешно изменён')
+        print(put('http://localhost:8000/api/v2/user/2',
+                   json={'age': 20}).json())
+        print(get('http://localhost:8000/api/v2/user').json())
 
 if test_version_second:
     if test_get:
-        print(print(get('http://localhost:8000/api/jobs/').json()))
+        print(get('http://localhost:8000/api/jobs/').json())
         print(get('http://localhost:8000/api/jobs/1').json())
         print(get('http://localhost:8000/api/jobs/100').json())
         print(get('http://localhost:8000/api/jobs/c').json())

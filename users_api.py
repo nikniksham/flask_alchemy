@@ -101,8 +101,6 @@ def put_user(user_id):
             user.speciality = request.json.get(key)
         if key == 'address':
             user.address = request.json.get(key)
-        if key == 'speciality':
-            user.speciality = request.json.get(key)
         if key == 'email':
             user.email = request.json.get(key)
         if key == 'city_from':
