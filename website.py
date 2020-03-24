@@ -5,9 +5,11 @@ import flask
 import requests
 from flask import Flask, render_template, request, make_response, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_restful import Api
 from requests import get
 from werkzeug.utils import redirect
 import jobs_api
+import user_resources
 import users_api
 from data import db_session
 import random
@@ -22,6 +24,12 @@ blueprint = flask.Blueprint('users_api', __name__,
                             template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
+app = Flask(__name__)
+api = Api(app)
+# для списка объектов
+api.add_resource(user_resources.UserListResource, '/api/v2/user')
+# для одного объекта
+api.add_resource(user_resources.UserResource, '/api/v2/user/<int:user_id>')
 
 
 def get_list_numbers(number):
