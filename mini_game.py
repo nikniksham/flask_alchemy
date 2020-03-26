@@ -187,11 +187,11 @@ class MiniGame:
         player_max_score = None
         max_score = -1
         for player in self.players:
+            if player.get_score() == max_score:
+                player_max_score = None
             if player.get_score() > max_score:
                 max_score = player.get_score()
                 player_max_score = player
-            if player.get_score() == max_score:
-                player_max_score = None
         return player_max_score
 
     def get_status_game(self):
@@ -201,7 +201,7 @@ class MiniGame:
         self.status_game = status
 
 
-player_1 = Player('Rjkz')
+player_1 = Player('Бобр добр')
 player_2 = Player('Николя')
 pygame.init()
 size = w, h = [600, 450]
