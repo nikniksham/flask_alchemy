@@ -2,12 +2,12 @@ from requests import get, post, delete, put
 
 # Тесты: 1 - api/v2/user; 2 - api/v2/jobs
 test_version_first = False
-test_version_second = True
+test_version_second = False
 
 # методы
 test_get = False
 test_post = False
-test_delete = True
+test_delete = False
 test_put = False
 if test_version_first:
     print(get('http://localhost:8100/api/v2/user').json())
@@ -41,7 +41,7 @@ if test_version_first:
                          'password': '123'}).json())
         print('правильный запрос')
         print(post('http://localhost:8100/api/v2/user',
-                   json={'id': 10,
+                   json={'id': 20,
                          'name': 'Николай',
                          'surname': 'Шамков',
                          'age': 16,
@@ -83,7 +83,7 @@ if test_version_second:
         print(post('http://localhost:8100/api/v2/jobs').json())
         print('не полный запрос')
         print(post('http://localhost:8100/api/v2/jobs',
-                   json={'id': 10}).json())
+                   json={'id': 1}).json())
         print('желаемый id уже занят')
         print(post('http://localhost:8100/api/v2/jobs',
                    json={'id': 1,
@@ -96,7 +96,7 @@ if test_version_second:
                          'is_finished': True}).json())
         print('правильный запрос')
         print(post('http://localhost:8100/api/v2/jobs',
-                   json={'id': 10,
+                   json={'id': 20,
                          'team_leader': 1,
                          'job': 'Заголовок',
                          'work_size': 1,
@@ -109,7 +109,7 @@ if test_version_second:
         print('нет в базе')
         print(delete('http://localhost:8100/api/v2/jobs/999').json())
         print('Успешно удалена')
-        print(delete('http://localhost:8100/api/v2/jobs/4').json())
+        print(delete('http://localhost:8100/api/v2/jobs/10').json())
 
     if test_put:
         print('нет в базе')
